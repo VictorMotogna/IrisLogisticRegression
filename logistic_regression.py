@@ -57,8 +57,8 @@ def plotScratchLogisticRegression():
     preds = model.predict(X)
 
     plt.figure(figsize=(10, 6))
-    plt.scatter(X[y == 0][:, 0], X[y == 0][:, 1], color='b', label='0')
-    plt.scatter(X[y == 1][:, 0], X[y == 1][:, 1], color='r', label='1')
+    plt.scatter(X[y == 0][:, 0], X[y == 0][:, 1], color='b', label='0 - setosa')
+    plt.scatter(X[y == 1][:, 0], X[y == 1][:, 1], color='r', label='1 - virginica')
     plt.legend()
     x1_min, x1_max = X[:,0].min(), X[:,0].max(),
     x2_min, x2_max = X[:,1].min(), X[:,1].max(),
@@ -129,4 +129,4 @@ skMethodEnd = datetime.datetime.now()
 print("sklearn duration: ", skMethodEnd-skMethodStart)
 
 # plotDataset()
-# plotScratchLogisticRegression()
+plotScratchLogisticRegression()
