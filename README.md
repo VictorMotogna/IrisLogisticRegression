@@ -44,3 +44,7 @@
   - `pip3`
   - `matplotlib (pyplot)`
   - `sklearn`
+
+## References
+  - https://medium.com/@martinpella/logistic-regression-from-scratch-in-python-124c5636b8ac
+  - https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html
