@@ -23,14 +23,15 @@ def plotDataset():
     plt.tight_layout()
     plt.show()
 
+# test data with :2 (only sepal length/width) & :4 (all 4 attributes - sepal length/width, petal length/width)
 X = iris.data[:, :2]
 y = (iris.target != 0) * 1
 
 # figure with 2 types of iris: setosa & virginica
 def plotRestrictedDataset():
     plt.figure(figsize=(10, 6))
-    plt.scatter(X[y == 0][:, 0], X[y == 0][:, 1], color='b', label='0')
-    plt.scatter(X[y == 1][:, 0], X[y == 1][:, 1], color='r', label='1')
+    plt.scatter(X[y == 0][:, 0], X[y == 0][:, 1], color='b', label='0 - setosa')
+    plt.scatter(X[y == 1][:, 0], X[y == 1][:, 1], color='r', label='1 - virginica')
     plt.legend()
     plt.show()
 
@@ -50,8 +51,8 @@ def scratchLogisticRegression(iterations):
     print("scratch accuracy: ", (preds == y).mean())
 
     
-def plotScratchLogisticRegression():
-    model = LogisticRegressionScratch(lr=0.1, num_iter=50000)
+def plotScratchLogisticRegression(iterations):
+    model = LogisticRegressionScratch(lr=0.1, num_iter=iterations)
     model.fit(X, y)
 
     preds = model.predict(X)
@@ -66,7 +67,8 @@ def plotScratchLogisticRegression():
     grid = np.c_[xx1.ravel(), xx2.ravel()]
     probs = model.predict_prob(grid).reshape(xx1.shape)
     plt.contour(xx1, xx2, probs, [0.5], linewidths=1, colors='black')
-
+    plt.xlabel('sepal length')
+    plt.ylabel('sepal width')
     plt.show()
 
 class LogisticRegressionScratch:
@@ -115,13 +117,14 @@ class LogisticRegressionScratch:
     def predict(self, X):
         return self.predict_prob(X).round()
 
-# tests: 10.000, 50.000, 200.000, 300.000
-numberOfIterations = 300000
+# tests: 1.000, 50.000, 200.000, 300.000
+numberOfIterations = 50000
+print("number of iterations: ", numberOfIterations)
 
-scratchMethodStart = datetime.datetime.now()
-scratchLogisticRegression(numberOfIterations)
-scratchMethodEnd = datetime.datetime.now()
-print("scratch duration: ", scratchMethodEnd-scratchMethodStart)
+# scratchMethodStart = datetime.datetime.now()
+# scratchLogisticRegression(numberOfIterations)
+# scratchMethodEnd = datetime.datetime.now()
+# print("scratch duration: ", scratchMethodEnd-scratchMethodStart)
 
 skMethodStart = datetime.datetime.now()
 sklearnLogisticRegression(numberOfIterations)
@@ -129,4 +132,5 @@ skMethodEnd = datetime.datetime.now()
 print("sklearn duration: ", skMethodEnd-skMethodStart)
 
 # plotDataset()
-plotScratchLogisticRegression()
+# plotRestrictedDataset()
+plotScratchLogisticRegression(numberOfIterations)
