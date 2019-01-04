@@ -3,6 +3,8 @@ import matplotlib.pyplot as plt
 from sklearn import datasets
 import datetime
 from sklearn.linear_model import LogisticRegression
+from logistic_regression_scratch import LogisticRegressionScratch
+import os
 
 iris = datasets.load_iris()
 
@@ -71,66 +73,72 @@ def plotScratchLogisticRegression(iterations):
     plt.ylabel('sepal width')
     plt.show()
 
-class LogisticRegressionScratch:
-    def __init__(self, lr=0.01, num_iter=10000, fit_intercept=True, verbose=False):
-        self.lr = lr
-        self.num_iter = num_iter
-        self.fit_intercept = fit_intercept
-        self.verbose = verbose
-
-    def __add_intercept(self, X):
-        intercept = np.ones((X.shape[0], 1))
-        return np.concatenate((intercept, X), axis=1)
-
-    def __sigmoid(self, z):
-        return 1 / (1 + np.exp(-z))
-    
-    def __loss(self, h, y):
-        return (-y * np.log(h) - (1 - y) * np.log(1 - h)).mean()
-
-    def fit(self, X, y):
-        if self.fit_intercept:
-            X = self.__add_intercept(X)
-        
-        # weights initialization
-        self.theta = np.zeros(X.shape[1])
-
-        for i in range(self.num_iter):
-            z = np.dot(X, self.theta)
-            h = self.__sigmoid(z)
-            gradient = np.dot(X.T, (h - y)) / y.size
-            self.theta -= self.lr * gradient
-            
-            z = np.dot(X, self.theta)
-            h = self.__sigmoid(z)
-            loss = self.__loss(h, y)
-                
-            if(self.verbose ==True and i % 10000 == 0):
-                print(f'loss: {loss} \t')
-
-    def predict_prob(self, X):
-        if self.fit_intercept:
-            X = self.__add_intercept(X)
-
-        return self.__sigmoid(np.dot(X, self.theta))
-
-    def predict(self, X):
-        return self.predict_prob(X).round()
-
 # tests: 1.000, 50.000, 200.000, 300.000
 numberOfIterations = 50000
 print("number of iterations: ", numberOfIterations)
 
-# scratchMethodStart = datetime.datetime.now()
-# scratchLogisticRegression(numberOfIterations)
-# scratchMethodEnd = datetime.datetime.now()
-# print("scratch duration: ", scratchMethodEnd-scratchMethodStart)
+def scratch(numberOfIterations): 
+    scratchMethodStart = datetime.datetime.now()
+    scratchLogisticRegression(numberOfIterations)
+    scratchMethodEnd = datetime.datetime.now()
+    print("scratch duration: ", scratchMethodEnd-scratchMethodStart)
 
-skMethodStart = datetime.datetime.now()
-sklearnLogisticRegression(numberOfIterations)
-skMethodEnd = datetime.datetime.now()
-print("sklearn duration: ", skMethodEnd-skMethodStart)
+def scikit(numberOfIterations): 
+    skMethodStart = datetime.datetime.now()
+    sklearnLogisticRegression(numberOfIterations)
+    skMethodEnd = datetime.datetime.now()
+    print("sklearn duration: ", skMethodEnd-skMethodStart)
 
-# plotDataset()
-# plotRestrictedDataset()
-plotScratchLogisticRegression(numberOfIterations)
+def display_title_bar():
+    # Clears the terminal screen, and displays a title bar.
+    os.system('clear')
+              
+    print("\t**********************************************")
+    print("\t***********  Logistic Regression  ************")
+    print("\t**********************************************")
+    
+
+choice = ''
+while choice != 'quit':    
+    display_title_bar()
+    
+    # Let users know what they can do.
+    print("\n[1] See logistic regression from scratch.")
+    print("[2] See logistic regression from scikit.")
+    print("[3] Compare logistic regression implementations.")
+    print("[4] See logistic regression from scratch plot.")
+    print("[5] See Iris dataset plot.")
+    print("[6] See binary Iris dataset plot.")
+    print("[quit] Quit.")
+    
+    choice = input("What would you like to do? ")
+    
+    # Respond to the user's choice.
+    if choice == '1':
+        numberOfIterations = int(float(input("How many iterations should we try? \n")))
+        scratch(numberOfIterations)
+        input("Press Enter to continue..")
+    elif choice == '2':
+        numberOfIterations = int(float(input("How many iterations should we try? \n")))
+        scikit(numberOfIterations)
+        input("Press Enter to continue..")
+    elif choice == '3':
+        numberOfIterations = int(float(input("How many iterations should we try? \n")))
+        scratch(numberOfIterations)
+        scikit(numberOfIterations)
+        input("Press Enter to continue..")
+    elif choice == '4':
+        numberOfIterations = int(float(input("How many iterations should we try? \n")))
+        plotScratchLogisticRegression(numberOfIterations)
+        input("Press Enter to continue..")
+    elif choice == '5':
+        plotDataset()
+        input("Press Enter to continue..")
+    elif choice == '6':
+        plotRestrictedDataset()
+        input("Press Enter to continue..")
+    elif choice == 'quit':
+        print("\nThanks for coming. Bye.")
+    else:
+        print("\nI didn't understand that choice.\n")
+        input("Press Enter to continue..")
